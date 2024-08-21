@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OAuth Callback</title>
+    <script>
+        // Extract the authorization code from the URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const code = urlParams.get('code');
+        const state = urlParams.get('state');
+
+        // Send the authorization code to the Flask backend
+        fetch('http://localhost:5000/callback', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ code: code, state: state })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Redirect to character selection page
+                window.location.href = 'http://localhost:5000/character_select';
+            } else {
+                // Handle error
+                console.error('Failed to authenticate:', data.message);
+            }
+        })
+        .catch(error => console.error('Error:', error));
+    </script>
+</head>
+<body>
+    <h1>OAuth Callback</h1>
+    <p>Processing authentication...</p>
+</body>
+</html>
