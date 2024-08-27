@@ -8,10 +8,11 @@
             if (code) {
                 window.opener.postMessage({ type: 'oauth-response', code: code }, '*');
             }
+            window.close();
         };
     </script>
 </head>
 <body>
-    <p>Authentication successful. This window will close automatically.</p>
+    <p>Authentication successful. You can close this window now.</p>
 </body>
 </html>
