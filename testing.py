@@ -185,7 +185,7 @@ if modes == 'Weapons':
         }
 
         transfer_response = requests.post("https://www.bungie.net/Platform/Destiny2/Actions/Items/TransferItem/", headers=headers, json=transfer_payload)
-        
+
         if transfer_response.status_code != 200:
             response_json = transfer_response.json()
             message = response_json.get('Message', 'No message found')
@@ -200,9 +200,9 @@ if modes == 'Weapons':
             "characterId": character_id,
             "membershipType": membership_type
         }
-        
+
         equip_response = requests.post("https://www.bungie.net/Platform/Destiny2/Actions/Items/EquipItem/", headers=headers, json=equip_payload)
-        
+
         if equip_response.status_code != 200:
             st.error(f"Failed to equip weapon. Status code: {equip_response.status_code}")
             st.json(equip_response.json())
