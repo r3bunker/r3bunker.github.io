@@ -1,22 +1,18 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Authentication Callback</title>
+    <script>
+        window.onload = function() {
+            var code = new URLSearchParams(window.location.search).get('code');
+            if (code) {
+                window.opener.postMessage({ type: 'oauth-response', code: code }, '*');
+            }
+            window.close();
+        };
+    </script>
 </head>
 <body>
-    <h1>Authentication Callback</h1>
-    <p>Redirecting...</p>
-    <script>
-        const urlParams = new URLSearchParams(window.location.search);
-        const code = urlParams.get('code');
-
-        if (code) {
-            window.location.href = 'http://localhost:8501/?code=' + encodeURIComponent(code);
-        } else {
-            document.body.innerHTML += '<p>Error: No authorization code found.</p>';
-        }
-    </script>
+    <p>Authentication successful. You can close this window now.</p>
 </body>
 </html>
