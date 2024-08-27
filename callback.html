@@ -1,20 +1,23 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Redirecting...</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Authentication Callback</title>
 </head>
 <body>
+    <h1>Authentication Successful</h1>
+    <p>Redirecting you back to the app...</p>
     <script>
-        // Extract the authorization code from the URL
+        // Extract the code from the URL
         const urlParams = new URLSearchParams(window.location.search);
         const code = urlParams.get('code');
-        
-        // Check if the code exists and redirect to your FastAPI server
+
+        // Redirect to your Streamlit app with the code
         if (code) {
-            // Replace `localhost:8000` with the URL where your FastAPI app is running
-            window.location.href = `http://localhost:8000/auth/callback?code=${code}`;
+            window.location.href = `http://localhost:8501/?code=${code}`;
         } else {
-            document.body.innerHTML = "Authorization code not found.";
+            document.body.innerHTML += '<p>Error: No authorization code found.</p>';
         }
     </script>
 </body>
