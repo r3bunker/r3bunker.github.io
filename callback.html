@@ -14,11 +14,10 @@
 
         if (code) {
             // Construct the URL for the Streamlit app with the code
-            const streamlitUrl = `http://localhost:8501/?code=${encodeURIComponent(code)}`;
+            const streamlitUrl = `https://d2bunker.streamlit.app/?code=${encodeURIComponent(code)}`;
             
-            // Open the Streamlit app URL in the original window and close this one
-            window.opener.location.href = streamlitUrl;
-            window.close();
+            // Redirect to the Streamlit app
+            window.location.href = streamlitUrl;
         } else {
             document.body.innerHTML += '<p>Error: No authorization code found.</p>';
         }
