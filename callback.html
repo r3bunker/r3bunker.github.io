@@ -7,19 +7,15 @@
 </head>
 <body>
     <h1>Authentication Callback</h1>
-    <p id="debug"></p>
+    <p>Redirecting...</p>
     <script>
         const urlParams = new URLSearchParams(window.location.search);
         const code = urlParams.get('code');
-        const debugElement = document.getElementById('debug');
 
         if (code) {
-            debugElement.innerHTML = `Code found: ${code}<br>Redirecting to: http://localhost:8501/?code=${encodeURIComponent(code)}`;
-            setTimeout(() => {
-                window.location.href = 'http://localhost:8501/?code=' + encodeURIComponent(code);
-            }, 3000); // Wait 3 seconds before redirecting
+            window.location.href = 'http://localhost:8501/?code=' + encodeURIComponent(code);
         } else {
-            debugElement.innerHTML = 'Error: No authorization code found.';
+            document.body.innerHTML += '<p>Error: No authorization code found.</p>';
         }
     </script>
 </body>
