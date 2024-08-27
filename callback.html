@@ -13,7 +13,8 @@
         const code = urlParams.get('code');
 
         if (code) {
-            window.location.href = 'http://localhost:8501/?code=' + encodeURIComponent(code);
+            // Replace this line with your production URL
+            window.location.href = 'https://d2bunker.streamlit.app/?code=' + encodeURIComponent(code);
         } else {
             document.body.innerHTML += '<p>Error: No authorization code found.</p>';
         }

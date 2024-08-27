@@ -28,7 +28,7 @@ if modes == 'Weapons':
     # Bungie OAuth details
     CLIENT_ID = "48121"
     CLIENT_SECRET = "WXmzsnefGIWeyAaYWE383Qfs6R0P370cGW0qMtnXquI"
-
+    REDIRECT_URI = "https://r3bunker.github.io/callback.html"
 
     # OAuth flow
     def get_access_token():
@@ -42,7 +42,7 @@ if modes == 'Weapons':
                     "code": code,
                     "client_id": CLIENT_ID,
                     "client_secret": CLIENT_SECRET,
-                    "redirect_uri": "https://r3bunker.github.io/callback.html"
+                    "redirect_uri": REDIRECT_URI
                 }
                 response = requests.post("https://www.bungie.net/platform/app/oauth/token/", data=data)
                 if response.status_code == 200:
@@ -56,7 +56,7 @@ if modes == 'Weapons':
                     st.json(response.json())
             else:
                 # If we don't have a code, provide the authentication link
-                oauth_url = f"https://www.bungie.net/en/OAuth/Authorize?client_id={CLIENT_ID}&response_type=code&redirect_uri=https://r3bunker.github.io/callback.html"
+                oauth_url = f"https://www.bungie.net/en/OAuth/Authorize?client_id={CLIENT_ID}&response_type=code&redirect_uri={REDIRECT_URI}"
                 st.markdown("### Authentication Required")
                 st.markdown(f"[Click here to authenticate with Bungie]({oauth_url})")
                 st.markdown("After authentication, you will be redirected back to this app automatically.")
@@ -149,34 +149,9 @@ if modes == 'Weapons':
             "Authorization": f"Bearer {access_token}"
         }
 
-        # Step 0: Check inventory space
-        inventory_response = requests.get(f"https://www.bungie.net/Platform/Destiny2/{membership_type}/Profile/{character_id}/?components=201", headers=headers)
-        if inventory_response.status_code == 200:
-            inventory = inventory_response.json()["Response"]["inventory"]["data"]["items"]
-            if len(inventory) >= 10:  # Assuming max inventory size is 10
-                # Move an item to vault
-                item_to_move = next((item for item in inventory if item["bucketHash"] == 1498876634), None)  # Kinetic weapon bucket
-                if item_to_move:
-                    vault_transfer_payload = {
-                        "itemReferenceHash": 0,
-                        "stackSize": 1,
-                        "transferToVault": True,
-                        "itemId": item_to_move["itemInstanceId"],
-                        "characterId": character_id,
-                        "membershipType": membership_type
-                    }
-                    vault_transfer_response = requests.post("https://www.bungie.net/Platform/Destiny2/Actions/Items/TransferItem/", headers=headers, json=vault_transfer_payload)
-                    if vault_transfer_response.status_code != 200:
-                        st.warning("Failed to move item to vault. Inventory might be full.")
-                        st.json(vault_transfer_response.json())
-                        return False
-                else:
-                    st.warning("No item found to move to vault. Inventory might be full.")
-                    return False
-
         # Step 1: Transfer the item to the character's inventory
         transfer_payload = {
-            "itemReferenceHash": 0,
+            "itemReferenceHash": 0,  # This will be ignored by the API
             "stackSize": 1,
             "transferToVault": False,
             "itemId": item_id,
@@ -187,8 +162,12 @@ if modes == 'Weapons':
         transfer_response = requests.post("https://www.bungie.net/Platform/Destiny2/Actions/Items/TransferItem/", headers=headers, json=transfer_payload)
         
         if transfer_response.status_code != 200:
+            # st.error(f"Failed to transfer weapon. Status code: {transfer_response.status_code}")
+            # Assuming transfer_response is a response object from the requests library
             response_json = transfer_response.json()
+            # Extract the 'message' from the JSON response
             message = response_json.get('Message', 'No message found')
+            # Display the entire JSON response
             st.json(response_json)
             if message == "There are no item slots available to transfer this item.":
                 st.warning("No item slots available to transfer this item. Please make some space in your inventory.")
