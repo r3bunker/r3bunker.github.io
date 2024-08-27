@@ -6,18 +6,14 @@
     <title>Authentication Callback</title>
 </head>
 <body>
-    <h1>Authentication Successful</h1>
-    <p>Redirecting back to the app...</p>
+    <h1>Authentication Callback</h1>
+    <p>Redirecting...</p>
     <script>
         const urlParams = new URLSearchParams(window.location.search);
         const code = urlParams.get('code');
 
         if (code) {
-            // Construct the URL for the Streamlit app with the code
-            const streamlitUrl = `https://d2bunker.streamlit.app/?code=${encodeURIComponent(code)}`;
-            
-            // Redirect to the Streamlit app
-            window.location.href = streamlitUrl;
+            window.location.href = 'http://localhost:8501/?code=' + encodeURIComponent(code);
         } else {
             document.body.innerHTML += '<p>Error: No authorization code found.</p>';
         }
