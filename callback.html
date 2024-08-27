@@ -15,7 +15,10 @@
 
         // Redirect to your Streamlit app with the code
         if (code) {
-            window.location.href = `http://localhost:8501/?code=${code}`;
+            // Store the code in localStorage
+            localStorage.setItem('bungie_auth_code', code);
+            // Redirect to the main page of your Streamlit app
+            window.location.href = 'http://localhost:8501/';
         } else {
             document.body.innerHTML += '<p>Error: No authorization code found.</p>';
         }
