@@ -6,18 +6,20 @@
     <title>Authentication Callback</title>
 </head>
 <body>
-    <h1>Authentication Successful</h1>
-    <p>Redirecting you back to the app...</p>
+    <h1>Authentication Callback</h1>
+    <p id="debug"></p>
     <script>
-        // Extract the code from the URL
         const urlParams = new URLSearchParams(window.location.search);
         const code = urlParams.get('code');
+        const debugElement = document.getElementById('debug');
 
-        // Redirect to your Streamlit app with the code
         if (code) {
-            window.location.href = 'http://localhost:8501/?code=' + encodeURIComponent(code);
+            debugElement.innerHTML = `Code found: ${code}<br>Redirecting to: http://localhost:8501/?code=${encodeURIComponent(code)}`;
+            setTimeout(() => {
+                window.location.href = 'http://localhost:8501/?code=' + encodeURIComponent(code);
+            }, 3000); // Wait 3 seconds before redirecting
         } else {
-            document.body.innerHTML += '<p>Error: No authorization code found.</p>';
+            debugElement.innerHTML = 'Error: No authorization code found.';
         }
     </script>
 </body>
